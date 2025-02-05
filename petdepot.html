@@ -1,0 +1,82 @@
+<html>
+
+<head>
+
+<title>Vue.js pet depot</title>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+</head>
+<body>
+
+    <div id="app">
+
+        <header>
+            <h1 >{{sitename}}</h1>
+            <button v-on:click="showcheckout">
+                {{cartitemcount}}
+                <span class="fas fa-cart-plus"></span> Checkout<br>
+               
+            </button>
+
+        </header>
+        <main>
+            <div v-if="showproduct">
+
+            
+            <figure>
+                <img v-bind:src="product.image">
+            </figure>
+            <h2 v-text="product.title"></h2>
+            <p v-html="product.Description"></p>
+
+            <p>price: {{product.price}}</p>
+            <p>available inventory: {{product.availableinventory}}</p>
+            <input type="button" value="add to cart" v-on:click="additem" v-if="canaddtocart" >
+            <button disabled="disabled"v-else>add to cart</button>
+        </div>
+        <div v-else>
+            <h2>checkout</h2>
+        </div>
+            
+
+        </main>
+    </div>
+    <script type="text/javascript">
+        let webstore= new Vue({
+            el:'#app',
+            data:{
+                sitename:'Vue.js Pet Depot',
+                product:{
+                    id:1001,
+                    title:"cat food,24.5lb bag",
+                    Description:"a 24.5 pound bag of <em>irresistible</em> ," + "organic goodness for your cat.",
+                    price:2000,
+                    image:"cat food.png",
+                    availableinventory: 5
+                },
+                cart : [],//array to store items
+                showproduct: true,
+            },
+            methods: {
+                additem(){
+                    this.cart.push(this.product.id);
+                },
+                showcheckout(){
+                    this.showproduct = this.showproduct ? false : true;
+                }
+            },
+            computed:{
+                cartitemcount:function(){
+                return this.cart.length||"";
+            },
+            canaddtocart:function(){
+                return this.product.availableinventory>this.cartitemcount;
+            },
+            
+
+        },
+        });
+    </script>
+</body>
+</html>
